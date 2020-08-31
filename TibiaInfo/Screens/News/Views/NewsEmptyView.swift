@@ -16,6 +16,7 @@ struct NewsEmptyView: View {
     }
 }
 
+#if DEBUG
 struct NewsEmptyView_Previews: PreviewProvider {
     static var previews: some View {
         NewsEmptyView()
@@ -23,3 +24,4 @@ struct NewsEmptyView_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
     }
 }
+#endif

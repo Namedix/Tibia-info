@@ -19,11 +19,14 @@ struct NewsView: View {
             .foregroundColor: UIColor.appBrownBramble
         ]
         UINavigationBar.appearance().backgroundColor = .appDutchWhite
+        UINavigationBar.appearance().tintColor = UIColor.appBrownBramble
     }
 
     var body: some View {
         NavigationView {
-            WithViewStore(self.store) { viewStore in
+            WithViewStore(self.store.scope(
+                state: NewsViewState.init(state:)
+            )) { viewStore in
                 ScrollView {
                     VStack {
                         if viewStore.isLoading {
@@ -35,36 +38,60 @@ struct NewsView: View {
                                     .padding()
                             }
                             ForEach(viewStore.news) { news in
-                                NewsItemView(
-                                    type: news.type,
-                                    description: news.news,
-                                    date: news.date.date
+                                self.navigationToDetails(
+                                    news: news,
+                                    selection: viewStore.binding(
+                                        get: \.selectedNewsId,
+                                        send: NewsAction.selectNews
+                                    )
                                 )
-                                    .padding([.leading, .top, .trailing])
                             }
                         }
                     }
                     .fullWidth()
                 }
-                .navigationBarTitle("News", displayMode: .inline)
                 .onAppear {
                     viewStore.send(.getNews)
                 }
             }
             .background(Color.appBlackPearl)
             .edgesIgnoringSafeArea(.bottom)
+            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationBarTitle("News", displayMode: .inline)
         }
+    }
+
+    func navigationToDetails(news: News, selection: Binding<Int?>) -> some View {
+        NavigationLink(
+            destination: IfLetStore(
+                self.store.scope(
+                    state: \.newsDetails,
+                    action: NewsAction.newsDetails
+                ),
+                then: NewsDetailsView.init(store:)
+            ),
+            tag: news.id,
+            selection: selection
+        ) {
+            NewsItemView(
+                type: news.type,
+                description: news.news,
+                date: news.date.date
+            )
+        }.padding([.leading, .top, .trailing])
     }
 }
 
+#if DEBUG
 struct NewsView_Previews: PreviewProvider {
     static var previews: some View {
         NewsView(
             store: Store(
-                initialState: NewsState(),
+                initialState: NewsState(news: [.mock]),
                 reducer: .empty,
                 environment: ()
             )
         )
     }
 }
+#endif

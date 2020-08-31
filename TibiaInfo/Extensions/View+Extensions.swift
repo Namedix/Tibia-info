@@ -9,7 +9,6 @@
 import SwiftUI
 
 extension View {
-
     public func square(width: CGFloat, aligment: Alignment = .center) -> some View {
         frame(width: width, height: width, alignment: aligment)
     }

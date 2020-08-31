@@ -14,7 +14,6 @@ struct TextStyle {
 }
 
 extension TextStyle {
-
     static let largeTitle: TextStyle = .init(
         font: .system(size: 32),
         color: .appBrownBramble
@@ -35,8 +34,6 @@ extension TextStyle {
         color: .appBrownBramble
     )
 }
-
-
 
 extension View {
     func textStyle(_ style: TextStyle) -> some View {

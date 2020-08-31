@@ -11,4 +11,5 @@ import Foundation
 struct NewsState: Equatable {
     var news: [News] = []
     var isLoading: Bool = false
+    var newsDetails: NewsDetailsState?
 }

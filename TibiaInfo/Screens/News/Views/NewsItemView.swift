@@ -28,7 +28,7 @@ struct NewsItemView: View {
                 .textStyle(.medium)
                 .padding(.horizontal)
                 .padding(.bottom, 4)
-            Text(date.split(separator: " ")[0])
+            Text(date)
                 .textStyle(.small)
                 .fullWidth(alignment: .trailing)
                 .padding([.trailing, .bottom])
@@ -38,6 +38,7 @@ struct NewsItemView: View {
     }
 }
 
+#if DEBUG
 struct NewsItemView_Previews: PreviewProvider {
     static var previews: some View {
         NewsItemView(type: "News", description: "Test test", date: "10.08.2020")
@@ -46,3 +47,4 @@ struct NewsItemView_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
     }
 }
+#endif

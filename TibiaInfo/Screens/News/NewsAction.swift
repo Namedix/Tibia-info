@@ -11,4 +11,7 @@ import Foundation
 enum NewsAction: Equatable {
     case getNews
     case didGetNews(Result<[News],Failure>)
+    case selectNews(Int?)
+
+    case newsDetails(NewsDetailsAction)
 }

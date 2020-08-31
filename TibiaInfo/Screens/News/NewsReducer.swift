@@ -31,5 +31,18 @@ let newsReducer = NewsReducer { state, action, environment in
     case .didGetNews(.failure(let error)):
         state.isLoading = false
         return .none
+
+    case .selectNews(.some(let newsId)):
+        state.newsDetails = state.news
+            .first { $0.id == newsId }
+            .map { NewsDetailsState(title: $0.news, newsId: $0.id) }
+        return .none
+
+    case .selectNews(.none):
+        state.newsDetails = nil
+        return .none
+
+    case .newsDetails:
+        return .none
     }
 }

@@ -23,10 +23,11 @@ final class NewsReducerTests: XCTestCase {
 
     var sut: TestStore!
     var scheduler: TestSchedulerOf<DispatchQueue>!
+    var returnedNews: [News]!
 
     override func setUp() {
         scheduler = DispatchQueue.testScheduler
-
+        returnedNews = [.mock, .mock, .mock]
         sut = TestStore(
             initialState: NewsState(),
             reducer: newsReducer,
@@ -40,10 +41,10 @@ final class NewsReducerTests: XCTestCase {
     override func tearDown() {
         sut = nil
         scheduler = nil
+        returnedNews = nil
     }
 
-    func testSuccessGetNews() {
-        let returnedNews: [News] = [.mock, .mock, .mock]
+    func testGetNewsThenSelect() {
         sut.assert(
             .send(.getNews) {
                 $0.isLoading = true
@@ -51,7 +52,10 @@ final class NewsReducerTests: XCTestCase {
             .do { self.scheduler.advance() },
             .receive(.didGetNews(.success(returnedNews))) {
                 $0.isLoading = false
-                $0.news = returnedNews
+                $0.news = self.returnedNews
+            },
+            .send(.selectNews(News.mock.id)) {
+                $0.newsDetails = .init(title: News.mock.news, newsId: News.mock.id)
             }
         )
     }
