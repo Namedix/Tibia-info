@@ -21,20 +21,9 @@ public struct Failure: Error, Equatable {
     }
 }
 
-
 struct NetworkClient {
     var getNews: () -> Effect<[News],Failure>
-    var getNewsDetails: (Int) -> Effect<News, Failure>
-}
-
-struct NewsResponse: Codable {
-    let newslist: NewsList
-    let information: Information
-}
-
-struct NewsList: Codable {
-    let type: String
-    let data: [News]
+    var getNewsDetails: (Int) -> Effect<NewsDetails, Failure>
 }
 
 extension NetworkClient {
@@ -50,9 +39,14 @@ extension NetworkClient {
                 .eraseToEffect()
     },
         getNewsDetails: { newsId in
-            .future { callback in
-                callback(.success(News.mock))
-            }
+            let url = URL(string: "https://api.tibiadata.com/v2/news/\(newsId).json")!
+
+            return URLSession.shared.dataTaskPublisher(for: url)
+                .map { data, _ in data }
+                .decode(type: NewsDetailsInfo.self, decoder: JSONDecoder())
+                .map { $0.news }
+                .mapError { Failure(error: $0) }
+                .eraseToEffect()
     })
 }
 
@@ -64,7 +58,7 @@ extension NetworkClient {
             }
     }, getNewsDetails: { newsId in
         .future { callback in
-            callback(.success(News.mock))
+            callback(.success(NewsDetails.mock))
         }
     })
 }

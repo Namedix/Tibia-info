@@ -1,5 +1,5 @@
 //
-//  NewsViewTests.swift
+//  NewsDetailsViewTests.swift
 //  TibiaInfoTests
 //
 //  Created by Namedix on 31/08/2020.
@@ -9,29 +9,28 @@
 import XCTest
 import SnapshotTesting
 import ComposableArchitecture
-
 @testable import TibiaInfo
 
-final class NewsViewTests: XCTestCase {
+final class NewsDetialsViewTests: XCTestCase {
 
     func testLoadingState() {
         assertSnapshot(
-            matching: NewsView(
+            matching: NewsDetailsView(
                 store: Store(
-                    initialState: NewsState(isLoading: true),
+                    initialState: NewsDetailsState(title: News.mock.news, newsId: News.mock.id, isLoading: true),
                     reducer: .empty,
                     environment: ()
-            )
-        ),
+                )
+            ),
             as: .image(layout: .device(config: .iPhoneXr))
         )
     }
 
     func testErrorState() {
         assertSnapshot(
-            matching: NewsView(
+            matching: NewsDetailsView(
                 store: Store(
-                    initialState: NewsState(),
+                    initialState: NewsDetailsState(title: News.mock.news, newsId: News.mock.id, isLoading: false),
                     reducer: .empty,
                     environment: ()
                 )
@@ -42,9 +41,9 @@ final class NewsViewTests: XCTestCase {
 
     func testSuccessState() {
         assertSnapshot(
-            matching: NewsView(
+            matching: NewsDetailsView(
                 store: Store(
-                    initialState: NewsState(news: [.mock, .mock, .mock]),
+                    initialState: NewsDetailsState(title: News.mock.news, newsId: News.mock.id, newsDetials: .mock),
                     reducer: .empty,
                     environment: ()
                 )

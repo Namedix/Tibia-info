@@ -7,5 +7,9 @@
 //
 
 import Foundation
+import ComposableArchitecture
 
-struct NewsDetailsEnvironment {}
+struct NewsDetailsEnvironment {
+    var mainQueue: AnySchedulerOf<DispatchQueue>
+    var networkClient: NetworkClient
+}

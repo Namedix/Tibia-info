@@ -59,4 +59,12 @@ final class NewsReducerTests: XCTestCase {
             }
         )
     }
+
+    func testHideDetials() {
+        sut.assert(
+            .send(.selectNews(nil)) {
+                $0.newsDetails = nil
+            }
+        )
+    }
 }

@@ -30,7 +30,7 @@ struct NewsView: View {
                 ScrollView {
                     VStack {
                         if viewStore.isLoading {
-                            ActivityIndicator()
+                            ActivityIndicator(color: .appDutchWhite)
                                 .padding()
                         } else {
                             if viewStore.news.isEmpty {

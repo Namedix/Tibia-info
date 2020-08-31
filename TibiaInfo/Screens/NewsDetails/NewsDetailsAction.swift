@@ -8,4 +8,7 @@
 
 import Foundation
 
-enum NewsDetailsAction: Equatable {}
+enum NewsDetailsAction: Equatable {
+    case getDetails
+    case didGetDetails(Result<NewsDetails, Failure>)
+}

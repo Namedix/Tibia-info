@@ -8,6 +8,16 @@
 
 import Foundation
 
+struct NewsResponse: Codable {
+    let newslist: NewsList
+    let information: Information
+}
+
+struct NewsList: Codable {
+    let type: String
+    let data: [News]
+}
+
 struct News: Codable, Equatable, Identifiable {
     let id: Int
     let type: String

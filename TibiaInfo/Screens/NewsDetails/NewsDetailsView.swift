@@ -13,10 +13,27 @@ struct NewsDetailsView: View {
     let store: Store<NewsDetailsState, NewsDetailsAction>
 
     var body: some View {
-        WithViewStore(self.store) { viewStore in
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-                .background(Color.appBlackPearl)
-                .navigationBarTitle(viewStore.title)
+        WithViewStore(self.store.scope(
+            state: NewsDetailsViewState.init(state:)
+        )) { viewStore in
+            VStack {
+                if viewStore.isLoading {
+                    ActivityIndicator(color: UIColor.appBlackPearl)
+                        .padding()
+                } else {
+                    HTMLStringView(htmlContent: viewStore.content)
+                        .padding()
+
+                }
+            }
+            .fullHeight(alignment: .top)
+            .fullWidth(alignment: .center)
+            .background(Color.appDutchWhite)
+            .edgesIgnoringSafeArea(.bottom)
+            .navigationBarTitle(viewStore.title)
+            .onAppear {
+                viewStore.send(.getDetails)
+            }
         }
     }
 }
